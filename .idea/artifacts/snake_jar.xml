@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact name="snake:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/snake_jar</output-path>
+    <root id="root">
+      <element id="archive" name="snake.jar">
+        <element id="module-output" name="snake" />
+      </element>
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:win:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:17.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:17.0.1" />
+      <element id="library" level="project" name="Maven: org.controlsfx:controlsfx:11.1.0" />
+    </root>
+  </artifact>
+</component>
