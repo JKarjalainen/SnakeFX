@@ -28,9 +28,14 @@ public class SnakeAI2 {
         canvas.clearScreen();
         ArrayList<Direction> directions = new ArrayList<>();
         ArrayList<SimSnake> simulationPoints = new ArrayList<>();
+        int times = 0;
         float time = System.currentTimeMillis();
         while(true) {
-
+            times++;
+            if(times > 5000000) {
+                movesToApple = panic(snake, apple);
+                break;
+            }
             if(drawCanvas)
                 canvas.clearScreen();
             //sleepAndDrawCanvas(s, apple);
@@ -87,7 +92,7 @@ public class SnakeAI2 {
 
         }
 
-
+        System.out.println("Loops needed for calc: " + times);
         movesToApple = directions;
     }
 
@@ -158,7 +163,6 @@ public class SnakeAI2 {
 
     public Direction getNextMove(Point food) {
         if(movesToApple.isEmpty()) calculateMovesToApple(food);
-        if(movesToApple.isEmpty()) movesToApple.add(snake.getDirection());
         return movesToApple.remove(0);
     }
 
