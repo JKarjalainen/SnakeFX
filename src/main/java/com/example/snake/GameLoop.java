@@ -9,7 +9,7 @@ public class GameLoop extends Thread {
     private final Snake snake;
     private final SnakeCanvas canvas;
     private Point food;
-    private SnakeAI snakeAI;
+    private SnakeAI2 snakeAI;
 
     public GameLoop(Snake snake, SnakeCanvas canvas) {
         this.snake = snake;
@@ -17,7 +17,7 @@ public class GameLoop extends Thread {
         this.food = new Point(snake.getHead().getX(), snake.getHead().getY() + 100);
         //Player controlled
         //setKeyListener();
-        snakeAI = new SnakeAI(snake, canvas);
+        snakeAI = new SnakeAI2(snake, canvas);
 
     }
 
@@ -36,35 +36,33 @@ public class GameLoop extends Thread {
     }
 
     public void run() {
+        int i = 0;
         while(GameController.getInstance().isPlaying()) {
 
             float time = System.currentTimeMillis();
-            canvas.clearScreen();
+
+
             if(snakeAI != null) {
                 snake.setDirection(snakeAI.getNextMove(food));
             }
+
             snake.move();
 
             if(checkFood()) {
                 snake.grow();
                 moveFood();
+                System.out.println(snake.getTail().size());
             } else {
                 snake.shift();
             }
-            if(snake.colliding())
+            if(snake.colliding() || snake.outOfBounds(canvas))
                 snake.die();
-            if(
-                    snake.getHead().getX() >= canvas.getWidth() ||
-                    snake.getHead().getX() < 0 ||
-                    snake.getHead().getY() >= canvas.getHeight() ||
-                    snake.getHead().getY() < 0
-            )
-                snake.die();
+            canvas.clearScreen();
             canvas.drawSnake(snake);
             canvas.drawPoints(food, Color.RED);
 
             time = System.currentTimeMillis() - time;
-            long interval = 1000 / 60;
+            long interval = 1000 / 50;
             if(time < interval) {
                 try {
                     Thread.sleep((long)(interval - time));

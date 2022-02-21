@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Snake {
     private final Point head;
-    private final ArrayList<Point> tail;
+    private ArrayList<Point> tail;
     private Direction direction;
     private Point lasPos;
 
@@ -12,7 +12,7 @@ public class Snake {
         this.head = new Point(startingPos);
         this.tail = new ArrayList<>();
         direction = Direction.DOWN;
-        this.tail.add(new Point(startingPos.getX(), startingPos.getY() + 10));
+        this.tail.add(new Point(startingPos.getX(), startingPos.getY() - 10));
     }
 
     public Point getHead() {
@@ -63,15 +63,57 @@ public class Snake {
         }
         return false;
     }
+    public boolean outOfBounds(SnakeCanvas canvas) {
+        return getHead().getX() >= canvas.getWidth() ||
+                getHead().getX() < 0 ||
+                getHead().getY() >= canvas.getHeight() ||
+                getHead().getY() < 0;
+    }
     public boolean colliding(Point a) {
         for(Point p : tail) {
             if (p.getX() == a.getX() && p.getY() == a.getY())
                 return true;
         }
+
         return false;
+    }
+
+    public Direction[] getWorseDirection() {
+        int right = 0, left = 0, up = 0, down = 0;
+
+        for(Point p : tail) {
+            if(p.getX() > head.getX()) left++;
+            else right++;
+
+            if(p.getY() > head.getY()) down++;
+            else up++;
+        }
+        Direction[] d = new Direction[2];
+
+        d[0] = right > left ? Direction.LEFT : Direction.RIGHT;
+        d[1] = up > down ? Direction.DOWN : Direction.UP;
+
+        return d;
     }
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Snake copy() {
+        Point p = new Point(getHead().getX(), getHead().getY());
+        Snake s = new Snake(p);
+        s.setTail((ArrayList<Point>) getTail().clone());
+        return s;
+    }
+    public SimSnake copySim() {
+        Point p = new Point(getHead().getX(), getHead().getY());
+        SimSnake s = new SimSnake(p);
+        s.setTail((ArrayList<Point>) getTail().clone());
+        return s;
+    }
+
+    public void setTail(ArrayList<Point> newT) {
+        tail = newT;
     }
 }
