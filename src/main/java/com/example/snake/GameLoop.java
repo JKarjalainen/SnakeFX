@@ -62,7 +62,7 @@ public class GameLoop extends Thread {
             canvas.drawPoints(food, Color.RED);
 
             time = System.currentTimeMillis() - time;
-            long interval = 1000 / 50;
+            long interval = 1000 / 35;
             if(time < interval) {
                 try {
                     Thread.sleep((long)(interval - time));

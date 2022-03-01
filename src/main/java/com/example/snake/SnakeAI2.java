@@ -1,5 +1,7 @@
 package com.example.snake;
 
+import com.example.snake.astar.AStart;
+import com.example.snake.astar.Position;
 import javafx.scene.paint.Color;
 
 import java.security.DrbgParameters;
@@ -28,6 +30,13 @@ public class SnakeAI2 {
         canvas.clearScreen();
         ArrayList<Direction> directions = new ArrayList<>();
         ArrayList<SimSnake> simulationPoints = new ArrayList<>();
+        int[][] m = gameToMaze();
+        AStart aStar = new AStart();
+        ArrayList<Direction> movesAStar = AStart.pathToMoves(aStar.run(m, new Position(snake.getHead().getX() / 10, snake.getHead().getY() / 10),  new Position(apple.getX() / 10, apple.getY() / 10)));
+        if(movesAStar != null) {
+            movesToApple = movesAStar;
+            return;
+        }
         int times = 0;
         float time = System.currentTimeMillis();
         while(true) {
@@ -153,8 +162,11 @@ public class SnakeAI2 {
     }
 
     private Direction getMoveCloserToApple(Snake s, Point a) {
-        if(s.getHead().getX() > a.getX() && s.getDirection() != Direction.RIGHT) return Direction.LEFT;
-        else if(s.getHead().getX() < a.getX() && s.getDirection() != Direction.LEFT) return Direction.RIGHT;
+        Direction moveDirection = null;
+        if(s.getHead().getX() > a.getX() && s.getDirection() != Direction.RIGHT) moveDirection = Direction.LEFT;
+        else if(s.getHead().getX() < a.getX() && s.getDirection() != Direction.LEFT) moveDirection = Direction.RIGHT;
+
+        if(moveDirection != null && checkIfSafeMove(s, moveDirection)) return moveDirection;
 
         if(s.getHead().getY() < a.getY() && s.getDirection() != Direction.UP) return Direction.DOWN;
         else if(s.getHead().getY() > a.getY() && s.getDirection() != Direction.DOWN) return Direction.UP;
@@ -163,6 +175,7 @@ public class SnakeAI2 {
 
     public Direction getNextMove(Point food) {
         if(movesToApple.isEmpty()) calculateMovesToApple(food);
+        if(movesToApple.isEmpty()) movesToApple.add(snake.getDirection());
         return movesToApple.remove(0);
     }
 
@@ -222,5 +235,13 @@ public class SnakeAI2 {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private int[][] gameToMaze() {
+        int[][] maze = new int[(int)canvas.getHeight() / 10][(int)canvas.getWidth() / 10];
+        for(Point p : snake.getTail()) {
+            maze[p.getY() / 10][p.getX() / 10] = 1;
+        }
+        return maze;
     }
 }
